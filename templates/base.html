@@ -4,11 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    {% if title %}
-      <title>{{ title }} - InventorFlow</title>
-    {% else %}
-      <title>InventorFlow</title>
-    {% endif %}
+    {% block title %}
+        {% if title %}
+          <title>{{ title }} - InventorFlow</title>
+        {% else %}
+          <title>InventorFlow</title>
+        {% endif %}
+    {% endblock title %}
     <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Buttons-With-Waves-Effect.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Dropdown-Dark-Theme.css') }}">
