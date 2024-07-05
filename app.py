@@ -21,7 +21,7 @@ def categories():
     """
     Categories management page.
     """
-    pass
+    return render_template('category.html')
 
 
 @app.route('/suppliers', methods=['GET', 'POST'], strict_slashes=False)
@@ -29,7 +29,7 @@ def suppliers():
     """
     Suppliers management page.
     """
-    pass
+    return render_template('suppliers.html')
 
 
 @app.route('/transactions', methods=['GET', 'POST'], strict_slashes=False)
@@ -37,7 +37,7 @@ def transactions():
     """
     Transactions Management page.
     """
-    pass
+    return render_template('transactions.html')
 
 
 @app.route('/summary', methods=['GET'], strict_slashes=False)
@@ -45,7 +45,7 @@ def summary():
     """
     Reports and Analysis page.
     """
-    pass
+    return render_template('summary.html')
 
 
 if __name__ == '__main__':

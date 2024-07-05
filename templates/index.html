@@ -16,14 +16,14 @@
     <div class="container" style="margin-bottom: 1px;">
         <header class="border rounded-pill border-2" style="margin-top: 12px;">
             <nav class="navbar navbar-expand-md fixed-top bg-dark py-3" data-bs-theme="dark">
-                <div class="container"><a class="navbar-brand d-flex align-items-center" href="index.html"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="container"><a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navcol-5">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}">Products</a></li>
-                            <li class="nav-item"><a class="nav-link" href="category.html">Category</a></li>
-                            <li class="nav-item"><a class="nav-link" href="suppliers.html">Suppliers</a></li>
-                            <li class="nav-item"><a class="nav-link" href="transactions.html">Transactions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="summary.html">Summary</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('categories') }}">Category</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('suppliers') }}">Suppliers</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('summary') }}">Summary</a></li>
                         </ul>
                     </div>
                 </div>

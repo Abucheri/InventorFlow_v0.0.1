@@ -5,25 +5,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>InventorFlow</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Buttons-With-Waves-Effect.css">
-    <link rel="stylesheet" href="assets/css/Dropdown-Dark-Theme.css">
-    <link rel="stylesheet" href="assets/css/Material-Footer.css">
-    <link rel="stylesheet" href="assets/css/Navbar-Right-Links-Dark-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Buttons-With-Waves-Effect.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Dropdown-Dark-Theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Material-Footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Navbar-Right-Links-Dark-icons.css') }}">
 </head>
 
 <body>
     <div class="container" style="margin-bottom: 1px;">
         <header class="border rounded-pill border-2" style="margin-top: 12px;">
             <nav class="navbar navbar-expand-md fixed-top bg-dark py-3" data-bs-theme="dark">
-                <div class="container"><a class="navbar-brand d-flex align-items-center" href="#"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="container"><a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navcol-5">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Products</a></li>
-                            <li class="nav-item"><a class="nav-link" href="category.html">Category</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="suppliers.html">Suppliers</a></li>
-                            <li class="nav-item"><a class="nav-link" href="transactions.html">Transactions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="summary.html">Summary</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Products</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('categories') }}">Category</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="{{ url_for('suppliers') }}">Suppliers</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('summary') }}">Summary</a></li>
                         </ul>
                     </div>
                 </div>
@@ -205,13 +205,13 @@
             </div>
         </div>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/Buttons-With-Waves-Effect-waves.js"></script>
-    <script src="assets/js/Buttons-With-Waves-Effect-waves-settings.js"></script>
-    <script src="assets/js/custom.js"></script>
+    <script src="{{ url_for('static', filename= 'assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'assets/js/bs-init.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'assets/js/Buttons-With-Waves-Effect-waves.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'assets/js/Buttons-With-Waves-Effect-waves-settings.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename= 'assets/js/custom.js') }}"></script>
 </body>
 
 </html>
