@@ -1,3 +1,8 @@
+"""
+This module is for generating secret keys for the database configuration.
+You can choose from the three which type of key you want to generate.
+"""
+
 import os
 import secrets
 
