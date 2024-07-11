@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>InventorFlow</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Buttons-With-Waves-Effect.css">
+    <link rel="stylesheet" href="assets/css/Dropdown-Dark-Theme.css">
+    <link rel="stylesheet" href="assets/css/Material-Footer.css">
+    <link rel="stylesheet" href="assets/css/Navbar-Right-Links-Dark-icons.css">
+</head>
+
+<body>
+    <div class="container" style="margin-bottom: 1px;">
+        <header class="border rounded-pill border-2" style="margin-top: 12px;">
+            <nav class="navbar navbar-expand-md fixed-top bg-dark py-3" data-bs-theme="dark">
+                <div class="container"><a class="navbar-brand d-flex align-items-center" href="index.html"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navcol-5">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Products</a></li>
+                            <li class="nav-item"><a class="nav-link" href="category.html">Category</a></li>
+                            <li class="nav-item"><a class="nav-link" href="units.html">Unit</a></li>
+                            <li class="nav-item"><a class="nav-link" href="suppliers.html">Suppliers</a></li>
+                            <li class="nav-item"><a class="nav-link" href="transactions.html">Transactions</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="summary.html">Summary</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="text-center" style="margin-top: 70px;">
+            <div class="dropdown"><button class="btn btn-success dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Export</button>
+                <div class="dropdown-menu"><a class="dropdown-item text-center" href="#">PDF</a></div>
+            </div>
+        </div>
+        <div style="margin-top: 45px;">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 col-xxl-9">
+                    <div class="card shadow">
+                        <div class="card-header d-flex flex-wrap justify-content-center align-items-center justify-content-sm-between gap-3">
+                            <h5 class="display-6 text-nowrap text-capitalize mb-0">Reports &amp; Analysis</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div><canvas data-bss-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Revenue&quot;,&quot;backgroundColor&quot;:&quot;#4e73df&quot;,&quot;borderColor&quot;:&quot;#4e73df&quot;,&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;,&quot;6250&quot;,&quot;7800&quot;,&quot;9800&quot;,&quot;15000&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;,&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:true}}],&quot;yAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:true}}]}}}"></canvas></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><canvas data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Revenue&quot;,&quot;backgroundColor&quot;:&quot;#4e73df&quot;,&quot;borderColor&quot;:&quot;#4e73df&quot;,&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;,&quot;6250&quot;,&quot;7800&quot;,&quot;9800&quot;,&quot;15000&quot;],&quot;fill&quot;:true},{&quot;label&quot;:&quot;Customers&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;2000&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;,&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:true}}],&quot;yAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:true}}]}}}"></canvas></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-dark float-none">
+            <p class="text-center" style="width: auto;margin-bottom: 8px;color: var(--bs-secondary);margin-top: 19px;padding-top: 6px;">© 2024 Copyright:&nbsp; O'Brien Abucheri</p>
+        </footer>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/chart.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/Buttons-With-Waves-Effect-waves.js"></script>
+    <script src="assets/js/Buttons-With-Waves-Effect-waves-settings.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</body>
+
+</html>
