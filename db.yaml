@@ -1,0 +1,5 @@
+mysql_host: "localhost"
+mysql_user: "root"
+mysql_password: "root"
+mysql_db: "flask_auth_system_demo"
+mysql_secret_key: "eb9ba81a46cc9c0895dccea70da72ecd6d455b6b1972c286"
