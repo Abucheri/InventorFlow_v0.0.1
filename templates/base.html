@@ -4,18 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    {% block title %}
-        {% if title %}
-          <title>{{ title }} - InventorFlow</title>
-        {% else %}
-          <title>InventorFlow</title>
-        {% endif %}
-    {% endblock title %}
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Buttons-With-Waves-Effect.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Dropdown-Dark-Theme.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Material-Footer.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/Navbar-Right-Links-Dark-icons.css') }}">
+    <title>
+        {% block title %}
+            {% if title %}
+                {{ title }} - InventorFlow
+            {% else %}
+                Home - InventorFlow
+            {% endif %}
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Buttons-With-Waves-Effect.css') }} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Dropdown-Dark-Theme.css') }} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Material-Footer.css') }} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Navbar-Right-Links-Dark-icons.css') }} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }} ">
 </head>
 
 <body>
@@ -25,8 +28,9 @@
                 <div class="container"><a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navcol-5">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}">Products</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('products') }}">Products</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('categories') }}">Category</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('units') }}">Unit</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('suppliers') }}">Suppliers</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('summary') }}">Summary</a></li>
@@ -35,18 +39,26 @@
                 </div>
             </nav>
         </header>
-        {% block content %}{% endblock content %}
-        <footer class="bg-dark float-none">
-            <p class="text-center" style="width: auto;margin-bottom: 8px;color: var(--bs-secondary);margin-top: 19px;padding-top: 6px;">© 2024 Copyright:&nbsp; O'Brien Abucheri</p>
-        </footer>
+        {% block content %}
+
+        {% endblock content %}
+        {% block footer %}
+            <footer class="bg-dark float-none">
+                <p class="text-center" style="width: auto;margin-bottom: 8px;color: var(--bs-secondary);margin-top: 19px;padding-top: 6px;">© 2024 Copyright:&nbsp; O'Brien Abucheri</p>
+            </footer>
+        {% endblock footer %}
     </div>
-    <script src="{{ url_for('static', filename= 'assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename= 'assets/js/bs-init.js') }}"></script>
-    <script src="{{ url_for('static', filename= 'assets/js/Buttons-With-Waves-Effect-waves.js') }}"></script>
-    <script src="{{ url_for('static', filename= 'assets/js/Buttons-With-Waves-Effect-waves-settings.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename= 'assets/js/custom.js') }}"></script>
+    {% block modals %}
+    {% endblock modals %}
+    <script src="{{ url_for('static', filename='assets/js/jquery-3.7.1.min.js') }} "></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }} "></script>
+    <script src="{{ url_for('static', filename='assets/js/chart.min.js') }} "></script>
+    <script src="{{ url_for('static', filename='assets/js/bs-init.js') }} "></script>
+    <script src="{{ url_for('static', filename='assets/js/Buttons-With-Waves-Effect-waves.js') }} "></script>
+    <script src="{{ url_for('static', filename='assets/js/Buttons-With-Waves-Effect-waves-settings.js') }} "></script>
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>#}
+    <script src="{{ url_for('static', filename='assets/js/custom.js') }} "></script>
 </body>
 
 </html>

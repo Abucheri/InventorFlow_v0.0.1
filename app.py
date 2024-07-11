@@ -4,19 +4,19 @@ Entry point into the system
 
 from flask import Flask, render_template
 
-
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/', methods=['GET'], strict_slashes=False)
+@app.route('/home', methods=['GET'], strict_slashes=False)
 def home():
     """
     Main products management page.
     """
-    return render_template('index.html')
+    return render_template('home.html')
 
 
-@app.route('/category', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/categories', methods=['GET', 'POST'], strict_slashes=False)
 def categories():
     """
     Categories management page.
@@ -30,6 +30,22 @@ def suppliers():
     Suppliers management page.
     """
     return render_template('suppliers.html')
+
+
+@app.route('/products', methods=['GET'], strict_slashes=False)
+def products():
+    """
+    Products management page
+    """
+    return render_template('index.html')
+
+
+@app.route('/units', methods=['GET'], strict_slashes=False)
+def units():
+    """
+    units management page.
+    """
+    return render_template('units.html')
 
 
 @app.route('/transactions', methods=['GET', 'POST'], strict_slashes=False)

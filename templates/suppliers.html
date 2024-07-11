@@ -1,37 +1,12 @@
-<!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>InventorFlow</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Buttons-With-Waves-Effect.css">
-    <link rel="stylesheet" href="assets/css/Dropdown-Dark-Theme.css">
-    <link rel="stylesheet" href="assets/css/Material-Footer.css">
-    <link rel="stylesheet" href="assets/css/Navbar-Right-Links-Dark-icons.css">
-</head>
+{% block title %}
+    Suppliers
+{% endblock title %}
 
-<body>
-    <div class="container" style="margin-bottom: 1px;">
-        <header class="border rounded-pill border-2" style="margin-top: 12px;">
-            <nav class="navbar navbar-expand-md fixed-top bg-dark py-3" data-bs-theme="dark">
-                <div class="container"><a class="navbar-brand d-flex align-items-center" href="#"><span>InventorFlow</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse" id="navcol-5">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Products</a></li>
-                            <li class="nav-item"><a class="nav-link" href="category.html">Category</a></li>
-                            <li class="nav-item"><a class="nav-link" href="units.html">Unit</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="suppliers.html">Suppliers</a></li>
-                            <li class="nav-item"><a class="nav-link" href="transactions.html">Transactions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="summary.html">Summary</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <div class="text-center" style="margin-top: 70px;"><button class="btn btn-success btn-sm" type="button" style="padding-top: 8px;" data-bs-target="#supplier_modal" data-bs-toggle="modal">Add Supplier</button></div>
-        <div style="margin-top: 45px;">
+{% block content %}
+    <div class="text-center" style="margin-top: 70px;"><button class="btn btn-success btn-sm" type="button" style="padding-top: 8px;" data-bs-target="#supplier_modal" data-bs-toggle="modal">Add Supplier</button></div>
+    <div style="margin-top: 45px;">
             <div class="row justify-content-center">
                 <div class="col-xl-10 col-xxl-9">
                     <div class="card shadow">
@@ -65,78 +40,6 @@
                                                 <div><button class="btn btn-primary btn-sm" type="button" data-bs-target="#supplier_update_modal" data-bs-toggle="modal">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 3px;" data-bs-target="#supplier_delete_modal" data-bs-toggle="modal">Delete</button></div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Supplier 3</td>
-                                            <td>5656777</td>
-                                            <td>1 year contract for beverages supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 3px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Supplier 2</td>
-                                            <td>0899786</td>
-                                            <td>7 month contract for dairy supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Supplier 4</td>
-                                            <td>6565728</td>
-                                            <td>2 year contract for baking products supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Supplier 20</td>
-                                            <td>89723</td>
-                                            <td>1 year contract fro frozen goods supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Supplier 90</td>
-                                            <td>0812345</td>
-                                            <td>4 year contract for baby items supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Supplier 9</td>
-                                            <td>24678789</td>
-                                            <td>7 months contract for meat supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>8</td>
-                                            <td>Supplier 11</td>
-                                            <td>98079969</td>
-                                            <td>1 year contract for fish and sea food supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>9</td>
-                                            <td>Supplier 2</td>
-                                            <td>145789</td>
-                                            <td>7 month contract for condiments and spices supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>10</td>
-                                            <td>Supplier 20</td>
-                                            <td>0976756742</td>
-                                            <td>1 year contract for cosmetics supply</td>
-                                            <td>2024-07-01</td>
-                                            <td><button class="btn btn-primary btn-sm" type="button">Update</button><button class="btn btn-danger btn-sm" type="button" style="margin-left: 2px;">Delete</button></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -156,10 +59,9 @@
                 </div>
             </div>
         </div>
-        <footer class="bg-dark float-none">
-            <p class="text-center" style="width: auto;margin-bottom: 8px;color: var(--bs-secondary);margin-top: 19px;padding-top: 6px;">© 2024 Copyright:&nbsp; O'Brien Abucheri</p>
-        </footer>
-    </div>
+{% endblock content %}
+
+{% block modals %}
     <div class="modal fade" role="dialog" tabindex="-1" id="supplier_modal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -206,13 +108,4 @@
             </div>
         </div>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/Buttons-With-Waves-Effect-waves.js"></script>
-    <script src="assets/js/Buttons-With-Waves-Effect-waves-settings.js"></script>
-    <script src="assets/js/custom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</body>
-
-</html>
+{% endblock modals %}
