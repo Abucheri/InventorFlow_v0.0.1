@@ -15,6 +15,8 @@ pip install -r requirements.txt
 - use `data_manager.py` to interact and test db functionalities before implementing them in the app.
 - The IDs for elements sre not automatic, they are random `uuid` generates by `uuid4()` function from the python `uuid` module. It is created during record creation.
 - User roles and sessions are managed by a custom decorator called `login_required` in the `helper_functions.py` file.
+
+
 ```python
 def login_required(allowed_roles=['admin']):
     """Protects routes based on user roles"""
@@ -28,12 +30,13 @@ def login_required(allowed_roles=['admin']):
             return func(*args, **kwargs)
         return wrapper
     return decorator
-- ```
+```
 
 ## Table Relations
 - `products` is related to `categories`, `suppliers`, `units` and `categories` via `Foreign Keys`.
 - `products` has a trigger to insert data into transactions whenever a product is made.
 - You cannot delete from `categories`, `suppliers` and `units` without deleting there related children in products like:
+
 ```python
 @app.route('/delete_unit/<id>', methods=['GET'], strict_slashes=False)
 @login_required(['admin', 'user'])
