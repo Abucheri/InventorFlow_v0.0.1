@@ -61,3 +61,10 @@ def delete_unit(id):
     flash(f'Unit "{unit_name}" deleted successfully!', 'success')
     return redirect(url_for('units'))
 ```
+
+## Technologies and Frameworks
+
+- Flask
+- Bootstrap, HTML/CSS/JS
+- MySQL
+- yaml
