@@ -32,17 +32,39 @@ mysql = MySQL(app)
 @app.route('/home', methods=['GET'], strict_slashes=False)
 def home():
     """
-    Main products management page.
+    Main homepage/landing page.
     """
     return render_template('home.html')
 
-
-@app.route('/categories', methods=['GET', 'POST'], strict_slashes=False)
+# CRUD operations
+# =======categories=======
+@app.route('/categories', methods=['GET'], strict_slashes=False)
 def categories():
     """
     Categories management page.
     """
-    return render_template('category.html')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    search_query = request.args.get('search', '')
+
+    cursor = mysql.connection.cursor()
+
+    if search_query:
+        search_sql = "SELECT * FROM categories WHERE name LIKE %s ORDER BY name ASC"
+        cursor.execute(search_sql, ('%' + search_query + '%',))
+    else:
+        search_sql = "SELECT * FROM categories ORDER BY name ASC"
+        cursor.execute(search_sql)
+
+    categories = cursor.fetchall()
+    cursor.close()
+
+    # Paginate the results manually
+    total = len(categories)
+    categories = categories[(page - 1) * per_page:page * per_page]
+    pagination = Pagination(page=page, per_page=per_page, total=total, items=categories)
+
+    return render_template('category.html', categories=pagination)
 
 
 @app.route('/suppliers', methods=['GET', 'POST'], strict_slashes=False)
