@@ -24,9 +24,30 @@ app.config['MYSQL_USER'] = db['mysql_user']
 app.config['MYSQL_PASSWORD'] = db['mysql_password']
 app.config['MYSQL_DB'] = db['mysql_db']
 
+# Session timeout configuration (30 minutes)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+
 # Initialize MySQL
 mysql = MySQL(app)
 
+# Middleware to handle session timeout
+@app.before_request
+def before_request():
+    if 'user_id' in session:
+        last_activity = session.get('last_activity')
+
+        # Ensure last_activity is timezone-aware (assuming UTC for example)
+        if isinstance(last_activity, datetime):
+            last_activity = last_activity.replace(tzinfo=utc)
+
+        # Check if session expired due to inactivity
+        if last_activity is not None and datetime.now(utc) > last_activity + app.permanent_session_lifetime:
+            session.clear()
+            flash('Your session has expired due to inactivity. Please log in again.', 'info')
+            return redirect(url_for('login'))
+
+        # Update last activity time for the session
+        session['last_activity'] = datetime.now(utc)
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 @app.route('/home', methods=['GET'], strict_slashes=False)
@@ -34,11 +55,80 @@ def home():
     """
     Main homepage/landing page.
     """
-    return render_template('home.html')
+    if 'user_name' in session:
+        return render_template('home.html', user_name=session['user_name'])
+    else:
+        return render_template('home.html')
+
+# =======AUTH operations=======
+@app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
+def login():  # put application's code here
+    """Login functionality route"""
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['pass']
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user and check_password_hash(user[3], password):
+            session['user_id'] = user[0]
+            session['user_name'] = user[1]
+            session['role'] = user[4]  # role is stored in the 5th column (index 4)
+            session['last_activity'] = datetime.now(utc)  # Set initial last activity
+            flash('Login successful!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid email or password', 'danger')
+            return redirect(url_for('login'))  # Redirect to login again on failure
+
+    # Handle GET request (show login form)
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'], strict_slashes=False)
+def register():  # put application's code here
+    """Register new users to db with name, email and passwword"""
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['pass']
+        confirm_password = request.form['c_pass']
+
+        if password != confirm_password:
+            flash('Passwords do not match!', 'danger')
+            return redirect(url_for('register'))
+
+        hashed_password = generate_password_hash(password)
+
+        # insert query
+        cursor = mysql.connection.cursor()
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO users (id, name, email, password) VALUES (%s, %s, %s, %s)",
+                       (str(uuid4()), name, email, hashed_password))
+        mysql.connection.commit()
+        cursor.close()
+        flash('Registration successful! Please login.', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/logout', methods=['GET'], strict_slashes=False)
+def logout():  # put application's code here
+    """Logout users from platform"""
+    # Clear session data
+    # session.pop('user_id', None)
+    # session.pop('user_name', None)
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
+
 
 # CRUD operations
 # =======categories=======
 @app.route('/categories', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def categories():
     """
     Categories management page.
@@ -67,6 +157,7 @@ def categories():
     return render_template('category.html', categories=pagination)
 
 @app.route('/add_categories', methods=['POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def add_category():
     """Add categories to database"""
     if request.method == 'POST':
@@ -80,6 +171,7 @@ def add_category():
 
 
 @app.route('/edit_category/<id>', methods=['GET', 'POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def edit_category(id):
     """Update categories by ID"""
     if request.method == 'POST':
@@ -101,6 +193,7 @@ def edit_category(id):
         return render_template('edit_category.html', category=category)
 
 @app.route('/delete_category/<id>', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def delete_category(id):
     """Delete categories by ID"""
     cursor = mysql.connection.cursor()
@@ -124,6 +217,7 @@ def delete_category(id):
 
 # =======units=======
 @app.route('/units', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def units():
     """Retrieve Units of measurement"""
     page = request.args.get('page', 1, type=int)
@@ -150,6 +244,7 @@ def units():
     return render_template('units.html', units=pagination)
 
 @app.route('/add_units', methods=['POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def add_unit():
     """Add units to database"""
     if request.method == 'POST':
@@ -162,6 +257,7 @@ def add_unit():
         return redirect(url_for('units'))
 
 @app.route('/edit_unit/<id>', methods=['GET', 'POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def edit_unit(id):
     """Update units by ID"""
     if request.method == 'POST':
@@ -180,6 +276,7 @@ def edit_unit(id):
         return render_template('edit_unit.html', unit=unit)
 
 @app.route('/delete_unit/<id>', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def delete_unit(id):
     """Delete units by ID"""
     cursor = mysql.connection.cursor()
@@ -203,6 +300,7 @@ def delete_unit(id):
 
 # =======Suppliers=======
 @app.route('/suppliers', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def suppliers():
     """Displays Suppliers details"""
     page = request.args.get('page', 1, type=int)
@@ -229,6 +327,7 @@ def suppliers():
     return render_template('suppliers.html', suppliers=pagination)
 
 @app.route('/add_suppliers', methods=['POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def add_supplier():
     """Adds a new supplier to DB"""
     if request.method == 'POST':
@@ -245,6 +344,7 @@ def add_supplier():
 
 
 @app.route('/edit_suppliers/<id>', methods=['GET', 'POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def edit_suppliers(id):
     """Updates Supplier details"""
     if request.method == 'POST':
@@ -287,6 +387,7 @@ def edit_suppliers(id):
         return render_template('edit_supplier.html', supplier=supplier)
 
 @app.route('/delete_suppliers/<id>', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def delete_suppliers(id):
     """Deletes supplier from DB by ID"""
     cursor = mysql.connection.cursor()
@@ -310,6 +411,7 @@ def delete_suppliers(id):
 
 # =======products=======
 @app.route('/products', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def products():
     """Displays all products with their relevant details or search results with pagination"""
     cursor = mysql.connection.cursor()
@@ -370,6 +472,7 @@ def products():
     return render_template('index.html', categories=categories, units=units, suppliers=suppliers, products=products, search_query=search_query, page=page, total_pages=total_pages)
 
 @app.route('/add_products', methods=['POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
 def add_products():
     """Adds new product into the DB"""
     if request.method == 'POST':
@@ -444,39 +547,6 @@ def delete_product(id):
     cursor.close()
     flash(f'Product "{product_name}" deleted successfully!', 'success')
     return redirect(url_for('products'))
-
-
-# @app.route('/analytics', methods=['GET', 'POST'], strict_slashes=False)
-# def analytics():
-#     """Displays a summary of the app data"""
-#     cursor = mysql.connection.cursor()
-#
-#     # Query counts for bar chart
-#     cursor.execute("SELECT COUNT(*) FROM products")
-#     product_count = cursor.fetchone()[0]
-#
-#     cursor.execute("SELECT COUNT(*) FROM categories")
-#     category_count = cursor.fetchone()[0]
-#
-#     cursor.execute("SELECT COUNT(*) FROM units")
-#     unit_count = cursor.fetchone()[0]
-#
-#     cursor.execute("SELECT COUNT(*) FROM suppliers")
-#     supplier_count = cursor.fetchone()[0]
-#
-#     # Query data for line chart (example query)
-#     cursor.execute(
-#         "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS date, COUNT(*) AS count FROM transactions GROUP BY DATE_FORMAT(created_at, '%Y-%m-%d')")
-#     data = cursor.fetchall()
-#     labels = [row[0] for row in data]
-#     counts = [row[1] for row in data]
-#
-#     # Close cursor and connection
-#     cursor.close()
-#
-#     # Render template with data
-#     return render_template('summary.html', product_count=product_count, category_count=category_count,
-#                            unit_count=unit_count, supplier_count=supplier_count, labels=labels, counts=counts)
 
 # =======transactions page=======
 # Add this route to display the transactions page

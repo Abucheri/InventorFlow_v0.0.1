@@ -5,18 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>InventorFlow</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Buttons-With-Waves-Effect.css">
-    <link rel="stylesheet" href="assets/css/Dropdown-Dark-Theme.css">
-    <link rel="stylesheet" href="assets/css/Material-Footer.css">
-    <link rel="stylesheet" href="assets/css/Navbar-Right-Links-Dark-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Buttons-With-Waves-Effect.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Dropdown-Dark-Theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Material-Footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Navbar-Right-Links-Dark-icons.css') }}">
 </head>
 
 <body>
     <div class="container-fluid" style="margin-bottom: 1px;">
         <header class="border rounded-pill border-2" style="margin-top: 12px;">
             <nav class="navbar navbar-expand-md fixed-top bg-dark py-3" data-bs-theme="dark">
-                <div class="container"><a class="navbar-brand d-flex align-items-center" href="#"><span>InventorFlow</span></a></div>
+                <div class="container"><a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}"><span>InventorFlow</span></a></div>
             </nav>
         </header>
         <div class="container" style="position: absolute;left: 0;right: 0;top: 50%;transform: translateY(-50%);-ms-transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);margin-top: 57px;">
@@ -26,24 +26,26 @@
                         <div class="text-center">
                             <h4 class="text-dark mb-4">Create an Account!</h4>
                         </div>
-                        <form class="user">
-                            <div class="mb-3"><input class="form-control form-control-user" type="text" placeholder="Username" required=""></div>
-                            <div class="mb-3"><input class="form-control form-control-user" type="email" id="email" placeholder="Email Address" required=""></div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <form class="user" action="/register", method="POST">
+                            <div class="mb-3"><input class="form-control form-control-user" type="text" placeholder="Name" name="name" required=""></div>
+                            <div class="mb-3"><input class="form-control form-control-user" type="email" id="email" name="email" placeholder="Email Address" required=""></div>
                             <div class="row mb-3">
-                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" required=""></div>
-                                <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="verifyPassword" placeholder="Repeat Password" required=""></div>
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" name="pass" placeholder="Password" required=""></div>
+                                <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="verifyPassword" name="c_pass" placeholder="Repeat Password" required=""></div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" placeholder="First Name" required=""></div>
-                                <div class="col-sm-6"><input class="form-control form-control-user" type="text" placeholder="Last Name" required=""></div>
-                            </div>
-                            <div class="row mb-3">
-                                <p id="emailErrorMsg" class="text-danger" style="display:none;">Paragraph</p>
-                                <p id="passwordErrorMsg" class="text-danger" style="display:none;">Paragraph</p>
-                            </div><button class="btn btn-primary d-block btn-user w-100" id="submitBtn" type="submit">Register Account</button>
+                            <button class="btn btn-primary d-block btn-user w-100" id="submitBtn" type="submit">Register Account</button>
                             <hr>
                         </form>
-                        <div class="text-center"><a class="small" href="login.html">Already have an account? Login!</a></div>
+                        <div class="text-center"><a class="small" href="{{ url_for('login') }}">Already have an account? Login!</a></div>
                     </div>
                 </div>
             </div>
@@ -52,11 +54,11 @@
             </footer>
         </div>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/Buttons-With-Waves-Effect-waves.js"></script>
-    <script src="assets/js/Buttons-With-Waves-Effect-waves-settings.js"></script>
-    <script src="assets/js/custom.js"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/bs-init.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/Buttons-With-Waves-Effect-waves.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/Buttons-With-Waves-Effect-waves-settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
