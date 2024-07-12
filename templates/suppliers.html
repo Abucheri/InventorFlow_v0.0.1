@@ -50,7 +50,7 @@
                                     <tbody>
                                         {% for supplier in suppliers.items %}
                                             <tr>
-                                                <td class="text-truncate" style="max-width: 200px;">{{ loop.index }}</td>
+                                                <td class="text-truncate" style="max-width: 200px;">{{ loop.index + (suppliers.page - 1) * suppliers.per_page }}</td>
                                                 <td>{{ supplier[1] }}</td>
                                                 <td>{{ supplier[2] }}</td>
                                                 <td>{{ supplier[3] }}</td>

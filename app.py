@@ -308,6 +308,223 @@ def delete_suppliers(id):
     flash(f'Supplier "{supplier_name}" deleted successfully!', 'success')
     return redirect(url_for('suppliers'))
 
+# =======products=======
+@app.route('/products', methods=['GET'], strict_slashes=False)
+def products():
+    """Displays all products with their relevant details or search results with pagination"""
+    cursor = mysql.connection.cursor()
+
+    # Get the search query and page number from the request arguments
+    search_query = request.args.get('search', '')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    offset = (page - 1) * per_page
+
+    # Fetch categories, units, and suppliers for the dropdowns
+    cursor.execute("SELECT id, name FROM categories ORDER BY name ASC")
+    categories = cursor.fetchall()
+
+    cursor.execute("SELECT id, unit FROM units ORDER BY unit ASC")
+    units = cursor.fetchall()
+
+    cursor.execute("SELECT id, supplier_name FROM suppliers ORDER BY supplier_name ASC")
+    suppliers = cursor.fetchall()
+
+    # Base SQL query
+    base_sql = """
+    SELECT p.id, p.product_name AS name, c.name AS category, u.unit AS unit, p.description AS description, p.price AS price, p.quantity AS quantity, 
+        s.supplier_name AS supplier, p.created_at AS create_date
+    FROM products AS p
+    LEFT JOIN categories AS c
+        ON p.product_category_id = c.id
+    LEFT JOIN units AS u
+        ON p.product_unit_id = u.id
+    LEFT JOIN suppliers AS s
+        ON p.product_supplier_id = s.id
+    """
+
+    # Modify the query if there is a search query
+    if search_query:
+        search_sql = base_sql + " WHERE p.product_name LIKE %s OR c.name LIKE %s OR u.unit LIKE %s OR s.supplier_name LIKE %s ORDER BY p.created_at DESC LIMIT %s OFFSET %s"
+        search_param = f"%{search_query}%"
+        cursor.execute(search_sql, (search_param, search_param, search_param, search_param, per_page, offset))
+    else:
+        pagination_sql = base_sql + " ORDER BY p.created_at DESC LIMIT %s OFFSET %s"
+        cursor.execute(pagination_sql, (per_page, offset))
+
+    products = cursor.fetchall()
+
+    # Get the total number of products for pagination
+    if search_query:
+        count_sql = "SELECT COUNT(*) FROM products AS p LEFT JOIN categories AS c ON p.product_category_id = c.id LEFT JOIN units AS u ON p.product_unit_id = u.id LEFT JOIN suppliers AS s ON p.product_supplier_id = s.id WHERE p.product_name LIKE %s OR c.name LIKE %s OR u.unit LIKE %s OR s.supplier_name LIKE %s"
+        cursor.execute(count_sql, (search_param, search_param, search_param, search_param))
+    else:
+        count_sql = "SELECT COUNT(*) FROM products"
+        cursor.execute(count_sql)
+
+    total_products = cursor.fetchone()[0]
+    total_pages = (total_products + per_page - 1) // per_page
+
+    cursor.close()
+
+    return render_template('index.html', categories=categories, units=units, suppliers=suppliers, products=products, search_query=search_query, page=page, total_pages=total_pages)
+
+@app.route('/add_products', methods=['POST'], strict_slashes=False)
+def add_products():
+    """Adds new product into the DB"""
+    if request.method == 'POST':
+        p_name = request.form['p_name']
+        p_category = request.form['p_category']
+        p_unit = request.form['p_unit']
+        p_desc = request.form['p_desc']
+        p_price = float(request.form['p_price'])
+        p_quantity = request.form['p_quantity']
+        p_supplier = request.form['p_supplier']
+        p_date = format_time_from_UI(request.form['p_date'])
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO products (id, product_name, product_category_id, product_unit_id, description, price, quantity, product_supplier_id, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(uuid4()), p_name, p_category, p_unit, p_desc, p_price, p_quantity, p_supplier, p_date))
+        mysql.connection.commit()
+        cursor.close()
+        flash(f'Product "{p_name}" added successfully!', 'success')
+        return redirect(url_for('products'))
+
+
+@app.route('/edit_products/<id>', methods=['GET', 'POST'], strict_slashes=False)
+@login_required(['admin', 'user'])
+def edit_products(id):
+    """Updates products by ID"""
+    if request.method == 'POST':
+        p_name = request.form['p_name']
+        p_category = request.form['p_category']
+        p_unit = request.form['p_unit']
+        p_desc = request.form['p_desc']
+        p_price = float(request.form['p_price'])
+        p_quantity = request.form['p_quantity']
+        p_supplier = request.form['p_supplier']
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            UPDATE products SET product_name = %s, product_category_id = %s, product_unit_id = %s, description = %s, price = %s, quantity = %s, product_supplier_id = %s, updated_at = %s WHERE id = %s
+        """, (p_name, p_category, p_unit, p_desc, p_price, p_quantity, p_supplier, updated_date(), id))
+
+        mysql.connection.commit()
+        cursor.close()
+        flash(f'Product "{p_name}" updated successfully!', 'success')
+        return redirect(url_for('products'))
+    else:
+        cursor = mysql.connection.cursor()
+
+        # Fetch the product details
+        cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
+        product = cursor.fetchone()
+
+        # Fetch categories, units, and suppliers for dropdowns
+        cursor.execute("SELECT id, name FROM categories ORDER BY name ASC")
+        categories = cursor.fetchall()
+
+        cursor.execute("SELECT id, unit FROM units ORDER BY unit ASC")
+        units = cursor.fetchall()
+
+        cursor.execute("SELECT id, supplier_name FROM suppliers ORDER BY supplier_name ASC")
+        suppliers = cursor.fetchall()
+
+        cursor.close()
+        return render_template('edit_products.html', product=product, categories=categories, units=units,
+                               suppliers=suppliers)
+
+@app.route('/delete_product/<id>', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
+def delete_product(id):
+    """Delete product by ID"""
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT product_name FROM products WHERE id = %s", (id,))
+    product_name = cursor.fetchone()[0]
+    cursor.execute("DELETE FROM products WHERE id = %s", (id,))
+    mysql.connection.commit()
+    cursor.close()
+    flash(f'Product "{product_name}" deleted successfully!', 'success')
+    return redirect(url_for('products'))
+
+
+# @app.route('/analytics', methods=['GET', 'POST'], strict_slashes=False)
+# def analytics():
+#     """Displays a summary of the app data"""
+#     cursor = mysql.connection.cursor()
+#
+#     # Query counts for bar chart
+#     cursor.execute("SELECT COUNT(*) FROM products")
+#     product_count = cursor.fetchone()[0]
+#
+#     cursor.execute("SELECT COUNT(*) FROM categories")
+#     category_count = cursor.fetchone()[0]
+#
+#     cursor.execute("SELECT COUNT(*) FROM units")
+#     unit_count = cursor.fetchone()[0]
+#
+#     cursor.execute("SELECT COUNT(*) FROM suppliers")
+#     supplier_count = cursor.fetchone()[0]
+#
+#     # Query data for line chart (example query)
+#     cursor.execute(
+#         "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS date, COUNT(*) AS count FROM transactions GROUP BY DATE_FORMAT(created_at, '%Y-%m-%d')")
+#     data = cursor.fetchall()
+#     labels = [row[0] for row in data]
+#     counts = [row[1] for row in data]
+#
+#     # Close cursor and connection
+#     cursor.close()
+#
+#     # Render template with data
+#     return render_template('summary.html', product_count=product_count, category_count=category_count,
+#                            unit_count=unit_count, supplier_count=supplier_count, labels=labels, counts=counts)
+
+# =======transactions page=======
+# Add this route to display the transactions page
+@app.route('/transactions', methods=['GET'], strict_slashes=False)
+@login_required(['admin', 'user'])
+def transactions():
+    """Displays all transactions with their relevant details or search results with pagination"""
+    cursor = mysql.connection.cursor()
+
+    # Get the search query and page number from the request arguments
+    search_query = request.args.get('search', '')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    offset = (page - 1) * per_page
+
+    # Base SQL query
+    base_sql = """
+    SELECT t.id, t.product_name, t.price, t.quantity, s.supplier_name, t.created_at 
+    FROM transactions AS t
+    LEFT JOIN suppliers AS s ON t.supplier_name_id = s.id
+    """
+
+    # Modify the query if there is a search query
+    if search_query:
+        search_sql = base_sql + " WHERE t.product_name LIKE %s OR s.supplier_name LIKE %s ORDER BY t.created_at DESC LIMIT %s OFFSET %s"
+        search_param = f"%{search_query}%"
+        cursor.execute(search_sql, (search_param, search_param, per_page, offset))
+    else:
+        pagination_sql = base_sql + " ORDER BY t.created_at DESC LIMIT %s OFFSET %s"
+        cursor.execute(pagination_sql, (per_page, offset))
+
+    transactions = cursor.fetchall()
+
+    # Get the total number of transactions for pagination
+    if search_query:
+        count_sql = "SELECT COUNT(*) FROM transactions AS t LEFT JOIN suppliers AS s ON t.supplier_name_id = s.id WHERE t.product_name LIKE %s OR s.supplier_name LIKE %s"
+        cursor.execute(count_sql, (search_param, search_param))
+    else:
+        count_sql = "SELECT COUNT(*) FROM transactions"
+        cursor.execute(count_sql)
+
+    total_transactions = cursor.fetchone()[0]
+    total_pages = (total_transactions + per_page - 1) // per_page
+
+    cursor.close()
+
+    return render_template('transactions.html', transactions=transactions, search_query=search_query, page=page, total_pages=total_pages)
+
 
 if __name__ == '__main__':
     port = 5000
