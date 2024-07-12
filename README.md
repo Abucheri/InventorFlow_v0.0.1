@@ -2,7 +2,7 @@
 
 This is a stock management module for an inventory system.
 
-## Installation
+## Installation & Usage
 
 - Install python 3
 ```python
@@ -13,6 +13,22 @@ pip install -r requirements.txt
 - In `db.yaml`, configure your `database credentials` and `secret_key` to use in the app
 - Use `secret_key_generator.py` to generate a secret key that you will copy to `db.yaml`. It has three options to choose from, choose according to you desire.
 - use `data_manager.py` to interact and test db functionalities before implementing them in the app.
+- The IDs for elements sre not automatic, they are random `uuid` generates by `uuid4()` function from the python `uuid` module. It is created during record creation.
+- User roles and sessions are managed by a custom decorator called `login_required` in the `helper_functions.py` file.
+```python
+def login_required(allowed_roles=['admin']):
+    """Protects routes based on user roles"""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print(f"Session Role: {session.get('role')}")
+            if 'user_id' not in session or session.get('role') not in allowed_roles:
+                flash('Unauthorized access. Please log in with appropriate permissions.', 'danger')
+                return redirect(url_for('login'))
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+- ```
 
 ## Table Relations
 - `products` is related to `categories`, `suppliers`, `units` and `categories` via `Foreign Keys`.
