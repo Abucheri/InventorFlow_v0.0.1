@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Supplier{% endblock %}
+
+{% block content %}
+    <h1>Edit Supplier</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form method="POST" class="row g-3">
+        <div class="col-12">
+            <label class="form-label" for="supplier_id">Supplier ID</label>
+            <input class="form-control form-control-sm" type="text" id="supplier_id" name="supplier_id" value="{{ supplier[0] }}" placeholder="Supplier ID" readonly="">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="supplier">Supplier Name</label>
+            <input class="form-control form-control-sm" type="text" id="supplier" name="supplier_name" value="{{ supplier[1] }}" placeholder="Supplier Name" required="">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="contact">Supplier Contact</label>
+            <input class="form-control form-control-sm" type="text" id="contact" name="supplier_contact" value="{{ supplier[2] }}" placeholder="Supplier Contact" required="">
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="agreement">Supplier Agreement</label>
+            <textarea class="form-control form-control-sm" id="agreement" name="supplier_agreement" placeholder="Write supplier agreement here..." required="">
+                {{ supplier[3] }}
+            </textarea>
+        </div>
+        <div class="text-center" style="margin-top: 15px">
+            <input class="btn btn-sm btn-success" type="submit" name="save" value="Update">
+        </div>
+    </form>
+{% endblock content %}

@@ -201,6 +201,113 @@ def delete_unit(id):
     flash(f'Unit "{unit_name}" deleted successfully!', 'success')
     return redirect(url_for('units'))
 
+# =======Suppliers=======
+@app.route('/suppliers', methods=['GET'], strict_slashes=False)
+def suppliers():
+    """Displays Suppliers details"""
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    search_query = request.args.get('search', '')
+
+    cursor = mysql.connection.cursor()
+
+    if search_query:
+        search_sql = "SELECT * FROM suppliers WHERE supplier_name LIKE %s ORDER BY supplier_name ASC"
+        cursor.execute(search_sql, ('%' + search_query + '%',))
+    else:
+        search_sql = "SELECT * FROM suppliers ORDER BY supplier_name ASC"
+        cursor.execute(search_sql)
+
+    suppliers = cursor.fetchall()
+    cursor.close()
+
+    # Paginate the results manually
+    total = len(suppliers)
+    suppliers = suppliers[(page - 1) * per_page:page * per_page]
+    pagination = Pagination(page=page, per_page=per_page, total=total, items=suppliers)
+
+    return render_template('suppliers.html', suppliers=pagination)
+
+@app.route('/add_suppliers', methods=['POST'], strict_slashes=False)
+def add_supplier():
+    """Adds a new supplier to DB"""
+    if request.method == 'POST':
+        supplier_name = request.form['supplier_name']
+        supplier_contact = request.form['supplier_contact']
+        supplier_agreement = request.form['supplier_agreement']
+        supplier_date = format_time_from_UI(request.form['supplier_date'])
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO suppliers (id, supplier_name, supplier_contact, supplier_agreement, created_at) VALUES (%s, %s, %s, %s, %s)", (str(uuid4()), supplier_name, supplier_contact, supplier_agreement, supplier_date))
+        mysql.connection.commit()
+        cursor.close()
+        flash(f'Supplier "{supplier_name}" added successfully!', 'success')
+        return redirect(url_for('suppliers'))
+
+
+@app.route('/edit_suppliers/<id>', methods=['GET', 'POST'], strict_slashes=False)
+def edit_suppliers(id):
+    """Updates Supplier details"""
+    if request.method == 'POST':
+        supplier_name = request.form['supplier_name']
+        supplier_contact = request.form['supplier_contact']
+        supplier_agreement = request.form['supplier_agreement']
+        updated = updated_date()
+        sql = "UPDATE suppliers SET "
+        params = []
+
+        if supplier_name:
+            sql += "supplier_name = %s, updated_at = %s, "
+            params.append(supplier_name)
+            params.append(updated)
+        if supplier_contact:
+            sql += "supplier_contact = %s, updated_at = %s, "
+            params.append(supplier_contact)
+            params.append(updated)
+        if supplier_agreement:
+            sql += "supplier_agreement = %s, updated_at = %s, "
+            params.append(supplier_agreement)
+            params.append(updated)
+
+        # Remove the trailing comma and space
+        sql = sql.rstrip(', ')
+        sql += " WHERE id = %s"
+        params.append(id)
+
+        cursor = mysql.connection.cursor()
+        cursor.execute(sql, tuple(params))
+        mysql.connection.commit()
+        cursor.close()
+        flash(f'Supplier "{supplier_name}" updated successfully!', 'success')
+        return redirect(url_for('suppliers'))
+    else:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM suppliers WHERE id = %s", (id,))
+        supplier = cursor.fetchone()
+        cursor.close()
+        return render_template('edit_supplier.html', supplier=supplier)
+
+@app.route('/delete_suppliers/<id>', methods=['GET'], strict_slashes=False)
+def delete_suppliers(id):
+    """Deletes supplier from DB by ID"""
+    cursor = mysql.connection.cursor()
+
+    # First, check if there are any products using this Supplier
+    cursor.execute("SELECT * FROM products WHERE product_supplier_id = %s", (id,))
+    products_using_unit = cursor.fetchall()
+
+    if products_using_unit:
+        # If there are products, you might choose to delete or update them
+        # For example, delete all products using this category
+        cursor.execute("DELETE FROM products WHERE product_supplier_id = %s", (id,))
+        mysql.connection.commit()
+    cursor.execute("SELECT supplier_name FROM suppliers WHERE id = %s", (id,))
+    supplier_name = cursor.fetchone()[0]
+    cursor.execute("DELETE FROM suppliers WHERE id = %s", (id,))
+    mysql.connection.commit()
+    cursor.close()
+    flash(f'Supplier "{supplier_name}" deleted successfully!', 'success')
+    return redirect(url_for('suppliers'))
+
 
 if __name__ == '__main__':
     port = 5000
