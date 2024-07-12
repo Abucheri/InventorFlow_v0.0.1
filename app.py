@@ -595,7 +595,6 @@ def transactions():
 
     return render_template('transactions.html', transactions=transactions, search_query=search_query, page=page, total_pages=total_pages)
 
-
 if __name__ == '__main__':
     port = 5000
     app.run(debug=True, port=port)

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Low Stock{% endblock title %}
+
+{% block content %}
+    <div class="text-center" style="margin-top: 150px;">
+        <h1>Low Stock Products</h1>
+        {% for product in products %}
+            <div class="product">
+                <p>Name: {{ product.name }}</p>
+                <p>Category: {{ product.category }}</p>
+                <p>Unit: {{ product.unit }}</p>
+                <p>Description: {{ product.description }}</p>
+                <p>Price: {{ product.price }}</p>
+                <p>Quantity: {{ product.quantity }}</p>
+                <p>Supplier: {{ product.supplier }}</p>
+                <p>Created At: {{ product.create_date }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
