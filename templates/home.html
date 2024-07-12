@@ -6,7 +6,12 @@
 
 {% block content %}
 	<div class="text-center" style="margin-top: 250px;">
-        Welcome to the homepage...
+        {% if 'user_name' in session %}
+            <h1>Welcome {{ session['user_name'] }}!</h1>
+        {% else %}
+            <h1>Welcome to InventorFlow!!</h1>
+        {% endif %}
+        <hr />
     </div>
 {% endblock %}
 
