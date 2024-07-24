@@ -595,6 +595,17 @@ def transactions():
 
     return render_template('transactions.html', transactions=transactions, search_query=search_query, page=page, total_pages=total_pages)
 
+# =======Error Handlers=======
+@app.errorhandler(404)
+def page_not_found_error(e):
+    """Handles page not found errors"""
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    """Handles Internal Server errors"""
+    return render_template('500.html'), 500
+
 if __name__ == '__main__':
     port = 8000
     app.run(debug=True, port=port)
