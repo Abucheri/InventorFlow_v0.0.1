@@ -5,6 +5,7 @@ blinker==1.8.2
 certifi==2024.7.4
 click==8.1.7
 colorama==0.4.6
+DBUtils==3.1.0
 dnspython==2.6.1
 email_validator==2.2.0
 exceptiongroup==1.2.2
@@ -16,6 +17,7 @@ Flask-Cors==4.0.1
 Flask-HTTPAuth==4.8.0
 Flask-Login==0.6.3
 flask-mixins==0.0.7
+Flask-Moment==1.0.6
 Flask-MySQL==1.5.2
 Flask-MySQLdb==2.0.0
 Flask-SQLAlchemy==3.1.1
